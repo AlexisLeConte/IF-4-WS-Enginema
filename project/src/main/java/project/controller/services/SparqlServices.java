@@ -10,6 +10,7 @@ import org.apache.jena.query.QueryFactory;
 import org.apache.jena.query.QuerySolution;
 import org.apache.jena.query.ResultSet;
 import org.apache.jena.sparql.engine.http.QueryEngineHTTP;
+import static project.utils.StringUtils.getCurrency;
 
 public class SparqlServices {
 
@@ -273,9 +274,11 @@ public class SparqlServices {
       ResultSet rs = qexec.execSelect();
       if (rs.hasNext()) {
         QuerySolution qs = rs.nextSolution();
-        budget = qs.get("b").toString();
-        int ocurrence = budget.indexOf("^");
-        budget = budget.substring(0, ocurrence);
+        budget = qs.getLiteral("b").getString()+" ";
+        String currenyUri = qs.getLiteral("b").getDatatypeURI();
+        String currency = getCurrency(currenyUri);
+        budget += currency;
+        
       }
     } catch(Exception e){
       e.printStackTrace();
@@ -293,6 +296,11 @@ public class SparqlServices {
         runtime = qs.get("r").toString();
         int ocurrence = runtime.indexOf("^");
         runtime = runtime.substring(0, ocurrence);
+        double runtimeInt = Double.parseDouble(runtime);
+        int hours = (int) (runtimeInt/3600);
+        int min = (int) (runtimeInt-hours*3600)/60;
+        int sec = (int) runtimeInt-hours*3600-min*60;
+        runtime = hours+"h"+min+"min";
       }
     } catch(Exception e){
       e.printStackTrace();
@@ -307,9 +315,10 @@ public class SparqlServices {
        ResultSet rs = qexec.execSelect();
         if (rs.hasNext()) {
           QuerySolution qs = rs.nextSolution();
-          boxOffice = qs.get("g").toString();
-          int ocurrence = boxOffice.indexOf("^");
-          boxOffice = boxOffice.substring(0,ocurrence);
+          boxOffice = qs.getLiteral("g").getString()+ " ";
+          String currenyUri = qs.getLiteral("g").getDatatypeURI();
+          String currency = getCurrency(currenyUri);
+          boxOffice += currency;
        } 
     } catch(Exception e){
        e.printStackTrace();
