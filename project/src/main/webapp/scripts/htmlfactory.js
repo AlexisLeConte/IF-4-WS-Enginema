@@ -48,6 +48,7 @@ function appendFilmInformation(component, filmInfo) {
   // Info
   component.append("<div class='card'><div class='card-body'><div class='row-sm-2 search-suggestion film-suggestion text-center'>" + filmInfo.name.value + "</div></div>"
           + "<ul class='list-group list-group-flush'>"
+          + "<li class='list-group-item no-border resource-info-item'><span style='font-weight:bold'>Type</span>Film</li>"
           + "<li class='list-group-item no-border resource-info-item'><span style='font-weight:bold'>Budget</span>" + filmInfo.Budget.value + "</li>"
           + "<li class='list-group-item no-border resource-info-item'><span style='font-weight:bold'>Box Office</span>" + filmInfo.BoxOffice.value + "</li>"
           + "<li class='list-group-item no-border resource-info-item'><span style='font-weight:bold'>Run Time</span>" + filmInfo.RunTime.value + "</li>"
