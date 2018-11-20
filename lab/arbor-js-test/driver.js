@@ -4,75 +4,36 @@ $(document).ready(function() {
   sys = arbor.ParticleSystem(200, 800, 0.5)
   sys.parameters({gravity:true})
   sys.renderer = renderer("#viewport")
-  /*
-  sys.addNode('node0', {name: 'Film', radius: 0, color: '#4444ff'})
-  sys.addNode('node0', {name: 'Film', radius: 0, color: '#4444ff'})
-  sys.addNode('node0', {name: 'Film', radius: 0, color: '#4444ff'})
-  sys.addNode('node1', {name: 'Director', uri:'https://github.com/AlexisLeConte/IF-4-WS-Project', radius: 0, color: '#44ff44'})
-  sys.addNode('node2', {name: 'Studirtdyetbetdfgye(bro', uri:'https://login.insa-lyon.fr/zimbra/', radius: 0, color: '#ff4444'})
-  sys.addNode('node3', {name: 'Actor', uri:'https://planete.insa-lyon.fr/uPortal/f/welcome/normal/render.uP', radius: 0, color: '#44cc44'})
-  sys.addNode('node4', {name: 'Deploy', deploy:true, radius: 0, color: '#e8f442'})
-  sys.addNode('node5', {name: 'New Focus I am a great Node :)', focus:true, radius: 0, color: '#e8092e'})
-  sys.addEdge('node0','node1')
-  sys.addEdge('node0','node2')
-  sys.addEdge('node0','node3')
-  sys.addEdge('node0','node4')
-  sys.addEdge('node0','node5')
   
-*/
-  
-    var postLoadData = {
-      nodes:{
-        node0:{name: 'Node0', radius: 20, color:'blue', uri: ''},
-        node0:{name: 'Node0', radius: 20, color:'blue', uri: ''},
-        node0:{name: 'Node0', radius: 20, color:'blue', uri: ''},
-        node1:{name: 'Node1', radius: 30, color:'red', uri: ''},
-        node4:{name: 'Node4', radius: 20, color:'blue', uri: ''},
-        node5:{name: 'Node5', radius: 30, color:'red', uri: ''},
-      },
-      edges:{
-        node0:{node4:{type:'directed by'}, node5:{type:'produced by'}},
-        node1:{node5:{type:'starred in'}},
-      }
-    };
-    sys.graft(postLoadData);
-  
-  
-
-})
-
-function queryDeployNode(source)
-{
-  if (sys.getEdgesFrom(source).length==0){
-    sys.addNode('node6',{name: 'Info1', radius: 20, color:'blue', uri: ''})
-    sys.addNode('node7',{name: 'Info2', radius: 30, color:'red', uri: ''})
-
-    sys.addEdge(source.name,'node6',{type:'has', erase:false})
-    sys.addEdge(source.name,'node7',{type:'owns', erase:false})
-  }
-  else{
-    sys.getEdgesFrom(source).forEach(function(edge){
-      sys.pruneNode(edge.target)
-    });
-  }
-}
-
-
-function queryFocusNode(source)
-{
   var postLoadData = {
-    nodes:{
-      node0:source.data,
-      node1:{name: 'Info1', radius: 20, color:'blue', uri: ''},
-      node2:{name: 'Info2', radius: 30, color:'red', uri: ''},
+    "nodes": {
+      "origin": {
+        "name": "Northern Light Productions",
+        "uri": "http://dbpedia.org/resource/Northern_Light_Productions",
+        "color": "#155724"
+      },
+      "httpdbpediaorgresourceThe_Singing_Revolution": {
+        "name": "The Singing Revolution",
+        "uri": "http://dbpedia.org/resource/The_Singing_Revolution",
+        "color": "#004085"
+      },
+      "Highestgrossingfilms": {
+        "name": " ",
+        "color": "#000000"
+      }
     },
-    edges:{
-      node0:{node1:{type:'has'}, node2:{type:'owns'}},
+    "edges": {
+      "Highestgrossingfilms": {
+        "httpdbpediaorgresourceThe_Singing_Revolution": {
+          "type": ""
+        }
+      },
+      "origin": {
+        "Highestgrossingfilms": {
+          "type": "Highest grossing films"
+        }
+      }
     }
   };
   sys.merge(postLoadData);
-}
-
-function queryResourceByUri(uri) {
-  alert(uri)
-}
+})

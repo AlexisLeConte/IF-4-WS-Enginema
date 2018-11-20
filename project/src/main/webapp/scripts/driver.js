@@ -117,7 +117,9 @@ function queryByUri(uri) {
     clearGraph();
     if (data.responseType === "resourceInfoGraph") {
       fixSingleNodeBug(data.responseContent.singleNode);
-      updateGraph(data.responseContent.resourceGraph);
+      if (data.responseContent.resourceGraph) {
+        updateGraph(data.responseContent.resourceGraph);
+      }
       appendResourceInformation($("#query-results"), data.responseContent.resourceInfo);
     } else {
       appendErrorMessage($("#query-results"), "Requested resource not found :(");

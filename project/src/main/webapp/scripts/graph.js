@@ -65,7 +65,7 @@ function renderer(viewport) {
         var pos = $(canvas).offset();
         mousePoint = arbor.Point(e.pageX-pos.left, e.pageY-pos.top);
         nearest = particleSystem.nearest(mousePoint);
-        if(nearest.node.data.uri && nearest.distance < nearest.node.data.radius){
+        if(nearest.node.data.uri && nearest.distance < nearest.node.data.radius) {
           queryByUri(nearest.node.data.uri);
         }
       });
