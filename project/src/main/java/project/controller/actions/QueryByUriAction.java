@@ -226,7 +226,7 @@ public class QueryByUriAction implements Action {
       
       // Studios he worked for
       LinkedHashMap<String, String> studios = SparqlServices.getStudiosActorWorkedFor(uri);
-      addRelationship(COMPANY_COLOR, "Worked For", studios, infos, nodes, edges, originEdges);
+      addRelationship(COMPANY_COLOR, "Worked For As Actor", studios, infos, nodes, edges, originEdges);
       
       // Major films he played in
       LinkedHashMap<String, String> majorFilms = new LinkedHashMap<>();
@@ -254,7 +254,7 @@ public class QueryByUriAction implements Action {
       
       // Studios he worked for
       LinkedHashMap<String, String> studios = SparqlServices.getStudiosDirectorWorkedFor(uri);
-      addRelationship(PERSON_COLOR, "Worked For", studios, infos, nodes, edges, originEdges);
+      addRelationship(PERSON_COLOR, "Worked For As Director", studios, infos, nodes, edges, originEdges);
       
       // Major films he directed
       LinkedHashMap<String, String> majorFilms = new LinkedHashMap<>();
@@ -278,7 +278,7 @@ public class QueryByUriAction implements Action {
       
       // Studios he worked for
       LinkedHashMap<String, String> studios = SparqlServices.getStudiosMusicComposerWorkedFor(uri);
-      addRelationship(PERSON_COLOR, "Worked For", studios, infos, nodes, edges, originEdges);
+      addRelationship(PERSON_COLOR, "Worked For As Composer", studios, infos, nodes, edges, originEdges);
       
       // Major films he composed music for
       LinkedHashMap<String, String> majorFilms = new LinkedHashMap<>();

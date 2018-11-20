@@ -13,24 +13,24 @@ public class StringUtils {
   }
   
   /**
-   * Removes all non-alphanumeric characters from a String.
+   * Returns a user-friendly notation for sums of money.
    * 
    * @param currencyUrl the String 
    * @return the currency symbol
    */
   public static String getCurrency(String currencyUri) {
-      String currency ="";
-      currency = currencyUri.substring(currencyUri.lastIndexOf('/') + 1).trim();
-      if(currency.equals("usDollar")){
-          currency="$";
-      }
-      else if(currency.equals("euro")){
-          currency="€";
-      }
-      else if(currency.equals("poundSterling")){
-          currency="£";
-      }
-      return currency;
+    String currency = "";
+    currency = currencyUri.substring(currencyUri.lastIndexOf('/') + 1).trim();
+    if (currency.equals("usDollar")) {
+      currency = "$";
+    }
+    else if (currency.equals("euro")) {
+      currency = "€";
+    }
+    else if (currency.equals("poundSterling")) {
+      currency = "£";
+    }
+    return currency;
   }
   
   /**

@@ -104,6 +104,7 @@ function queryByName(name) {
 }
 
 function queryByUri(uri) {
+  window.scrollTo(0, 0);
   $.ajax({
     url: "./ActionServlet",
     method: "GET",
