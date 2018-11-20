@@ -36,9 +36,9 @@ function appendFilmInformation(component, filmInfo) {
     //informations
     component.append("<div class='card'><div class='card-body'><div class='row-sm-2 search-suggestion film-suggestion text-center'>" + filmInfo.name.value + "</div></div>"
             + "<ul class='list-group list-group-flush'>"
-            + "<li class='list-group-item no-border film-info-item'><span style='font-weight:bold'>Budget</span>" + filmInfo.Budget.value + " USD </li>"
-            + "<li class='list-group-item no-border film-info-item'><span style='font-weight:bold'>Box Office</span>" + filmInfo.BoxOffice.value + " USD </li>"
-            + "<li class='list-group-item no-border film-info-item'><span style='font-weight:bold'>Run Time</span>" + filmInfo.RunTime.value + " s </li>"
+            + "<li class='list-group-item no-border film-info-item'><span style='font-weight:bold'>Budget</span>" + filmInfo.Budget.value + "</li>"
+            + "<li class='list-group-item no-border film-info-item'><span style='font-weight:bold'>Box Office</span>" + filmInfo.BoxOffice.value + "</li>"
+            + "<li class='list-group-item no-border film-info-item'><span style='font-weight:bold'>Run Time</span>" + filmInfo.RunTime.value + "</li>"
             + "</ul></div>");
 
     appendFilmEntityCard(component, "Starring", filmInfo.Starring, "person-suggestion");
