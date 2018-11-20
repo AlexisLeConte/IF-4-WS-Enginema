@@ -34,7 +34,7 @@ public class SparqlServices {
    * @param queryString the query
    * @return a QueryExecution for this query
    */
-  private static QueryExecution createPrefixedQuery (String queryString) {
+  public static QueryExecution createPrefixedQuery (String queryString) {
     Query query = QueryFactory.create(QNAMES + queryString);
     return QueryExecutionFactory.sparqlService(DBPEDIA_URL, query);
   }
@@ -111,7 +111,7 @@ public class SparqlServices {
         + "  ?f rdf:type dbo:Film ;\n"
         + "     dbo:runtime ?r ;\n"
         + "     dbo:starring ?a .\n"
-        + "  ?a foaf:name ?name ;\n"
+        + "  ?a rdfs:label ?name ;\n"
         + "     rdf:type dbo:Person .\n"
         + "  FILTER(lang(?name)='en') .\n"
         + "  FILTER(" + condition + "). \n"
@@ -124,7 +124,7 @@ public class SparqlServices {
         + "  ?f rdf:type dbo:Film ;\n"
         + "     dbo:runtime ?r ;\n"
         + "     dbo:director ?a .\n"
-        + "  ?a foaf:name ?name ;\n"
+        + "  ?a rdfs:label ?name ;\n"
         + "     rdf:type dbo:Person .\n"
         + "  FILTER(lang(?name)='en') .\n"
         + "  FILTER(" + condition + "). \n"
@@ -137,7 +137,7 @@ public class SparqlServices {
         + "  ?f rdf:type dbo:Film ;\n"
         + "     dbo:runtime ?r ;\n"
         + "     dbo:musicComposer ?a .\n"
-        + "  ?a foaf:name ?name ;\n"
+        + "  ?a rdfs:label ?name ;\n"
         + "     rdf:type dbo:Person .\n"
         + "  FILTER(lang(?name)='en') .\n"
         + "  FILTER(" + condition + "). \n"
@@ -252,7 +252,6 @@ public class SparqlServices {
   public static String getResourceName(String uri){
     String name = null;
     String query = "SELECT ?name WHERE { <" + uri + "> rdfs:label ?name. FILTER(lang(?name) = \"en\") } ORDER BY ?name LIMIT 1";
-    System.out.println("QUERY = " + query);
     try (QueryExecution qexec = createPrefixedQuery(query)) {
       ((QueryEngineHTTP)qexec).addParam("timeout", "10000"); // DBpedia timeout
       ResultSet rs = qexec.execSelect();
@@ -279,7 +278,6 @@ public class SparqlServices {
         String currenyUri = qs.getLiteral("b").getDatatypeURI();
         String currency = getCurrency(currenyUri);
         budget += currency;
-        
       }
     } catch(Exception e){
       e.printStackTrace();
@@ -332,7 +330,7 @@ public class SparqlServices {
     String query = "SELECT ?actor ?name WHERE {\n" +
                     "<" + uri + "> rdf:type dbo:Film ;\n" +
                     "dbo:starring ?actor .\n" +
-                    "?actor foaf:name ?name .\n" +
+                    "?actor rdfs:label ?name .\n" +
                     "FILTER (lang(?name) = 'en').\n" +
                     "}";
     try (QueryExecution qexec = createPrefixedQuery(query)) {
@@ -343,7 +341,7 @@ public class SparqlServices {
         try {
           String actorUri = qs.getResource("actor").getURI();          
           String actorName = qs.getLiteral("name").getString();
-          if (actorName != null && !actorName.isEmpty()) {
+          if (actorName != null && !actorName.isEmpty() && ResourceServices.isValidUri(actorUri)) {
             starring.put(actorUri, actorName);
           }
         } catch(Exception e){
@@ -361,7 +359,7 @@ public class SparqlServices {
     String query = "SELECT ?director ?name WHERE {\n" +
                     "<" + uri + "> rdf:type dbo:Film ;\n" +
                     "dbo:director ?director .\n" +
-                    "?director foaf:name ?name .\n" +
+                    "?director rdfs:label ?name .\n" +
                     "FILTER (lang(?name) = 'en').\n" +
                     "}";
     try (QueryExecution qexec = createPrefixedQuery(query)) {
@@ -372,7 +370,7 @@ public class SparqlServices {
         try {
           String directorUri = qs.getResource("director").getURI();          
           String directorName = qs.getLiteral("name").getString();
-          if (directorName != null && !directorName.isEmpty()) {
+          if (directorName != null && !directorName.isEmpty()  && ResourceServices.isValidUri(directorUri)) {
             directed.put(directorUri, directorName);
           }
         } catch(Exception e) {
@@ -390,7 +388,7 @@ public class SparqlServices {
     String query = "SELECT ?musicComposer ?name WHERE {\n" +
                     "<" + uri + "> rdf:type dbo:Film ;\n" +
                     "dbo:musicComposer ?musicComposer .\n" +
-                    "?musicComposer foaf:name ?name .\n" +
+                    "?musicComposer rdfs:label ?name .\n" +
                     "FILTER (lang(?name) = 'en').\n" +
                     "}";
     try (QueryExecution qexec = createPrefixedQuery(query)) {
@@ -401,7 +399,7 @@ public class SparqlServices {
         try {
           String musicComposerUri = qs.getResource("musicComposer").getURI();          
           String musicComposerName = qs.getLiteral("name").getString();
-          if (musicComposerName != null && !musicComposerName.isEmpty()) {
+          if (musicComposerName != null && !musicComposerName.isEmpty() && ResourceServices.isValidUri(musicComposerUri)) {
             composed.put(musicComposerUri, musicComposerName);
           }
         } catch(Exception e) {
@@ -430,7 +428,7 @@ public class SparqlServices {
         try {
           String studioUri = qs.getResource("studio").getURI();          
           String studioName = qs.getLiteral("name").getString();
-          if (studioName != null && !studioName.isEmpty()) {
+          if (studioName != null && !studioName.isEmpty() && ResourceServices.isValidUri(studioUri)) {
             composed.put(studioUri, studioName);
           }
         } catch(Exception e) {
@@ -458,9 +456,9 @@ public class SparqlServices {
         QuerySolution qs = rs.nextSolution();
         try {
           String distributorUri = qs.getResource("distributor").getURI();          
-          String distributoroName = qs.getLiteral("name").getString();
-          if (distributoroName != null && !distributoroName.isEmpty()) {
-            composed.put(distributorUri, distributoroName);
+          String distributorName = qs.getLiteral("name").getString();
+          if (distributorName != null && !distributorName.isEmpty() && ResourceServices.isValidUri(distributorUri)) {
+            composed.put(distributorUri, distributorName);
           }
         } catch(Exception e) {
           e.printStackTrace();
@@ -514,7 +512,7 @@ public class SparqlServices {
         try {
           String filmUri = qs.getResource("film").getURI();          
           String filmName = qs.getLiteral("name").getString();
-          if (filmName != null && !filmName.isEmpty()) {
+          if (filmName != null && !filmName.isEmpty() && ResourceServices.isValidUri(filmUri)) {
             films.put(filmUri, filmName);
           }
         } catch(Exception e) {
@@ -545,7 +543,7 @@ public class SparqlServices {
         try {
           String filmUri = qs.getResource("film").getURI();          
           String filmName = qs.getLiteral("name").getString();
-          if (filmName != null && !filmName.isEmpty()) {
+          if (filmName != null && !filmName.isEmpty() && ResourceServices.isValidUri(filmUri)) {
             films.put(filmUri, filmName);
           }
         } catch(Exception e) {
@@ -577,7 +575,7 @@ public class SparqlServices {
         QuerySolution qs = rs.nextSolution();
         String filmUri = qs.getResource("film").getURI();
         String filmName = qs.getLiteral("name").getString();
-        if (filmName != null && !filmName.isEmpty()) {
+        if (filmName != null && !filmName.isEmpty() && ResourceServices.isValidUri(filmUri)) {
           films.put(filmUri, filmName);
         }
       }  
@@ -593,7 +591,7 @@ public class SparqlServices {
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:starring <" + uri + "> ;\n" +
                    "   dbo:starring ?a .\n" +
-                   "?a foaf:name ?name .\n" +
+                   "?a rdfs:label ?name .\n" +
                    "FILTER(lang(?name) = 'en').\n" +
                    "FILTER(?a != <" + uri + ">).\n" +
                    "}\n" +
@@ -609,7 +607,7 @@ public class SparqlServices {
         try {
           String actorUri = qs.getResource("a").getURI();
           String actorName = qs.getLiteral("name").getString();
-          if (actorName != null && !actorName.isEmpty()) {
+          if (actorName != null && !actorName.isEmpty() && ResourceServices.isValidUri(actorUri)) {
             actors.put(actorUri, actorName);
           }
         } catch(Exception e) {
@@ -628,7 +626,7 @@ public class SparqlServices {
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:starring <" + uri + "> ;\n" +
                    "   dbp:studio ?s .\n" +
-                   "?s foaf:name ?name .\n" +
+                   "?s rdfs:label ?name .\n" +
                    "FILTER (lang(?name) = 'en').\n" +
                    "}\n" +
                    "GROUP BY ?s ?name\n" +
@@ -643,7 +641,7 @@ public class SparqlServices {
         try {
           String studioUri = qs.getResource("s").getURI();
           String studioName = qs.getLiteral("name").getString();
-          if (studioName != null && !studioName.isEmpty()) {
+          if (studioName != null && !studioName.isEmpty() && ResourceServices.isValidUri(studioUri)) {
             studios.put(studioUri, studioName);
           }
         } catch(Exception e) {
@@ -675,7 +673,7 @@ public class SparqlServices {
         QuerySolution qs = rs.nextSolution();
         String filmUri = qs.getResource("film").getURI();
         String filmName = qs.getLiteral("name").getString();
-        if (filmName != null && !filmName.isEmpty()) {
+        if (filmName != null && !filmName.isEmpty() && ResourceServices.isValidUri(filmUri)) {
           films.put(filmUri, filmName);
         }
       }  
@@ -691,7 +689,7 @@ public class SparqlServices {
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:director <" + uri + "> ;\n" +
                    "   dbo:starring ?a .\n" +
-                   "?a foaf:name ?name .\n" +
+                   "?a rdfs:label ?name .\n" +
                    "FILTER(lang(?name) = 'en').\n" +
                    "FILTER(?a != <" + uri + ">).\n" +
                    "}\n" +
@@ -707,7 +705,7 @@ public class SparqlServices {
         try {
           String actorUri = qs.getResource("a").getURI();
           String actorName = qs.getLiteral("name").getString();
-          if (actorName != null && !actorName.isEmpty()) {
+          if (actorName != null && !actorName.isEmpty() && ResourceServices.isValidUri(actorUri)) {
             actors.put(actorUri, actorName);
           }
         } catch(Exception e) {
@@ -726,7 +724,7 @@ public class SparqlServices {
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:director <" + uri + "> ;\n" +
                    "   dbo:musicComposer ?m .\n" +
-                   "?m foaf:name ?name .\n" +
+                   "?m rdfs:label ?name .\n" +
                    "FILTER(lang(?name) = 'en').\n" +
                    "FILTER(?m != <" + uri + ">).\n" +
                    "}\n" +
@@ -742,7 +740,7 @@ public class SparqlServices {
         try {
           String musicComposerUri = qs.getResource("m").getURI();
           String musicComposerName = qs.getLiteral("name").getString();
-          if (musicComposerName != null && !musicComposerName.isEmpty()) {
+          if (musicComposerName != null && !musicComposerName.isEmpty() && ResourceServices.isValidUri(musicComposerUri)) {
             actors.put(musicComposerUri, musicComposerName);
           }
         } catch(Exception e) {
@@ -761,7 +759,7 @@ public class SparqlServices {
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:director <" + uri + "> ;\n" +
                    "   dbp:studio ?s .\n" +
-                   "?s foaf:name ?name .\n" +
+                   "?s rdfs:label ?name .\n" +
                    "FILTER (lang(?name) = 'en').\n" +
                    "}\n" +
                    "GROUP BY ?s ?name\n" +
@@ -776,7 +774,7 @@ public class SparqlServices {
         try {
           String studioUri = qs.getResource("s").getURI();
           String studioName = qs.getLiteral("name").getString();
-          if (studioName != null && !studioName.isEmpty()) {
+          if (studioName != null && !studioName.isEmpty() && ResourceServices.isValidUri(studioUri)) {
             studios.put(studioUri, studioName);
           }
         } catch(Exception e) {
@@ -808,7 +806,7 @@ public class SparqlServices {
         QuerySolution qs = rs.nextSolution();
         String filmUri = qs.getResource("film").getURI();
         String filmName = qs.getLiteral("name").getString();
-        if (filmName != null && !filmName.isEmpty()) {
+        if (filmName != null && !filmName.isEmpty() && ResourceServices.isValidUri(filmUri)) {
           films.put(filmUri, filmName);
         }
       }  
@@ -824,7 +822,7 @@ public class SparqlServices {
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:musicComposer <" + uri + "> ;\n" +
                    "   dbo:director ?d .\n" +
-                   "?d foaf:name ?name .\n" +
+                   "?d rdfs:label ?name .\n" +
                    "FILTER(lang(?name) = 'en').\n" +
                    "FILTER(?d != <" + uri + ">).\n" +
                    "}\n" +
@@ -840,7 +838,7 @@ public class SparqlServices {
         try {
           String directorUri = qs.getResource("d").getURI();
           String directorName = qs.getLiteral("name").getString();
-          if (directorName != null && !directorName.isEmpty()) {
+          if (directorName != null && !directorName.isEmpty() && ResourceServices.isValidUri(directorUri)) {
             actors.put(directorUri, directorName);
           }
         } catch(Exception e) {
@@ -859,7 +857,7 @@ public class SparqlServices {
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:musicComposer <" + uri + "> ;\n" +
                    "   dbp:studio ?s .\n" +
-                   "?s foaf:name ?name .\n" +
+                   "?s rdfs:label ?name .\n" +
                    "FILTER (lang(?name) = 'en').\n" +
                    "}\n" +
                    "GROUP BY ?s ?name\n" +
@@ -874,7 +872,7 @@ public class SparqlServices {
         try {
           String studioUri = qs.getResource("s").getURI();
           String studioName = qs.getLiteral("name").getString();
-          if (studioName != null && !studioName.isEmpty()) {
+          if (studioName != null && !studioName.isEmpty() && ResourceServices.isValidUri(studioUri)) {
             studios.put(studioUri, studioName);
           }
         } catch(Exception e) {

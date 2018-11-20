@@ -34,7 +34,10 @@ public class QueryByUriAction implements Action {
     
     try {
       JsonObject container = null;
-      if("film".equals(category)) {
+      if (!ResourceServices.isValidUri(uri)) {
+        container = new JsonObject();
+        container.addProperty("responseType", "error");
+      } else if("film".equals(category)) {
         container = createFilmResponse(uri);
       } else if ("company".equals(category)) {
         container = createCompanyResponse(uri);

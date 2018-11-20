@@ -294,6 +294,11 @@ public class ResourceServices {
     return resourceCategory;
   }
   
+  public static boolean isValidUri(String uri) {
+    if (getCategory(uri) == null) return false;
+    return uri.substring(uri.indexOf(":") + 1).indexOf(":") == -1;
+  }
+  
   public static Map<String, String> loadResourceDataFromCache(String filename) 
     throws FileNotFoundException, IOException {
     Map<String, String> data = new LinkedHashMap<>();
