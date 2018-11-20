@@ -19,9 +19,9 @@ public class QueryByUriAction implements Action {
   
   private final static Gson gson = new GsonBuilder().setPrettyPrinting().create();
   
-  private final static String FILM_COLOR = "#4444ff";
-  private final static String COMPANY_COLOR = "#229922";
-  private final static String PERSON_COLOR = "#ff4444";
+  private final static String FILM_COLOR = "#004085";
+  private final static String COMPANY_COLOR = "#155724";
+  private final static String PERSON_COLOR = "#822224";
 
   @Override
   public void execute(HttpServletRequest request, HttpServletResponse response) {
@@ -99,11 +99,18 @@ public class QueryByUriAction implements Action {
     LinkedHashMap<String, String> musicComposer = SparqlServices.getFilmMusicComposer(uri);
     addRelationship(PERSON_COLOR, "Music By", musicComposer, infos, nodes, edges, originEdges);
     
-    // Producer
-    // TODO
+    // Studio
+    LinkedHashMap<String, String> studio = SparqlServices.getFilmStudio(uri);
+    addRelationship(COMPANY_COLOR, "Studio", studio, infos, nodes, edges, originEdges);
+    
+    // Distributors
+    LinkedHashMap<String, String> distributors = SparqlServices.getFilmDistributors(uri);
+    addRelationship(COMPANY_COLOR, "Distributors", distributors, infos, nodes, edges, originEdges);
     
     if (originEdges.size() > 0) {
       edges.add("origin", originEdges);
+    } else {
+      responseContent.addProperty("singleNode", Boolean.TRUE);
     }
     resourceGraph.add("nodes", nodes);
     resourceGraph.add("edges", edges);
@@ -169,6 +176,8 @@ public class QueryByUriAction implements Action {
     
     if (originEdges.size() > 0) {
       edges.add("origin", originEdges);
+    } else {
+      responseContent.addProperty("singleNode", Boolean.TRUE);
     }
     resourceGraph.add("nodes", nodes);
     resourceGraph.add("edges", edges);
@@ -287,6 +296,8 @@ public class QueryByUriAction implements Action {
     
     if (originEdges.size() > 0) {
       edges.add("origin", originEdges);
+    } else {
+      responseContent.addProperty("singleNode", Boolean.TRUE);
     }
     resourceGraph.add("nodes", nodes);
     resourceGraph.add("edges", edges);

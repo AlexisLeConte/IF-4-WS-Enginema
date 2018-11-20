@@ -6,6 +6,14 @@ function initGraph(viewport) {
   sys.renderer = renderer(viewport);
 }
 
+function fixSingleNodeBug(singleNode) {
+  if (singleNode) {
+    sys.parameters({ friction: '1.0' });
+  } else {
+    sys.parameters({ friction: '0.5' });
+  }
+}
+
 function updateGraph(graph) {
   sys.merge(graph);
 }

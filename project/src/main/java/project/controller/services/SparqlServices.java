@@ -250,7 +250,7 @@ public class SparqlServices {
   
   public static String getResourceName(String uri){
     String name = null;
-    String query = "SELECT ?name WHERE { <" + uri + "> rdfs:label ?name. FILTER(lang(?name) = \"en\") }";
+    String query = "SELECT ?name WHERE { <" + uri + "> rdfs:label ?name. FILTER(lang(?name) = \"en\") } ORDER BY ?name LIMIT 1";
     try (QueryExecution qexec = createPrefixedQuery(query)) {
       ((QueryEngineHTTP)qexec).addParam("timeout", "10000"); // DBpedia timeout
       ResultSet rs = qexec.execSelect();
@@ -322,7 +322,8 @@ public class SparqlServices {
     String query = "SELECT ?actor ?name WHERE {\n" +
                     "<" + uri + "> rdf:type dbo:Film ;\n" +
                     "dbo:starring ?actor .\n" +
-                    "?actor foaf:name ?name\n" +
+                    "?actor foaf:name ?name .\n" +
+                    "FILTER (lang(?name) = 'en').\n" +
                     "}";
     try (QueryExecution qexec = createPrefixedQuery(query)) {
       ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
@@ -350,7 +351,8 @@ public class SparqlServices {
     String query = "SELECT ?director ?name WHERE {\n" +
                     "<" + uri + "> rdf:type dbo:Film ;\n" +
                     "dbo:director ?director .\n" +
-                    "?director foaf:name ?name\n" +
+                    "?director foaf:name ?name .\n" +
+                    "FILTER (lang(?name) = 'en').\n" +
                     "}";
     try (QueryExecution qexec = createPrefixedQuery(query)) {
       ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
@@ -378,7 +380,8 @@ public class SparqlServices {
     String query = "SELECT ?musicComposer ?name WHERE {\n" +
                     "<" + uri + "> rdf:type dbo:Film ;\n" +
                     "dbo:musicComposer ?musicComposer .\n" +
-                    "?musicComposer foaf:name ?name\n" +
+                    "?musicComposer foaf:name ?name .\n" +
+                    "FILTER (lang(?name) = 'en').\n" +
                     "}";
     try (QueryExecution qexec = createPrefixedQuery(query)) {
       ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
@@ -390,6 +393,64 @@ public class SparqlServices {
           String musicComposerName = qs.getLiteral("name").getString();
           if (musicComposerName != null && !musicComposerName.isEmpty()) {
             composed.put(musicComposerUri, musicComposerName);
+          }
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+      }
+    } catch(Exception e){
+      e.printStackTrace();
+    }
+    return composed;
+  }
+  
+  public static LinkedHashMap<String, String> getFilmStudio(String uri) {
+    LinkedHashMap<String, String> composed = new LinkedHashMap<>();
+    String query = "SELECT ?studio ?name WHERE {\n" +
+                    "<" + uri + "> rdf:type dbo:Film ;\n" +
+                    "              dbo:studio ?studio .\n" +
+                    "              ?studio rdfs:label ?name .\n" +
+                    "FILTER (lang(?name) = 'en').\n" +
+                    "}";
+    try (QueryExecution qexec = createPrefixedQuery(query)) {
+      ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+      ResultSet rs = qexec.execSelect();
+      while (rs.hasNext()) {
+        QuerySolution qs = rs.nextSolution();
+        try {
+          String studioUri = qs.getResource("studio").getURI();          
+          String studioName = qs.getLiteral("name").getString();
+          if (studioName != null && !studioName.isEmpty()) {
+            composed.put(studioUri, studioName);
+          }
+        } catch(Exception e) {
+          e.printStackTrace();
+        }
+      }
+    } catch(Exception e){
+      e.printStackTrace();
+    }
+    return composed;
+  }
+  
+  public static LinkedHashMap<String, String> getFilmDistributors(String uri) {
+    LinkedHashMap<String, String> composed = new LinkedHashMap<>();
+    String query = "SELECT ?distributor ?name WHERE {\n" +
+                    "<" + uri + "> rdf:type dbo:Film ;\n" +
+                    "              dbo:distributor ?distributor .\n" +
+                    "              ?distributor rdfs:label ?name .\n" +
+                    "FILTER (lang(?name) = 'en').\n" +
+                    "}";
+    try (QueryExecution qexec = createPrefixedQuery(query)) {
+      ((QueryEngineHTTP)qexec).addParam("timeout", "10000") ;
+      ResultSet rs = qexec.execSelect();
+      while (rs.hasNext()) {
+        QuerySolution qs = rs.nextSolution();
+        try {
+          String distributorUri = qs.getResource("distributor").getURI();          
+          String distributoroName = qs.getLiteral("name").getString();
+          if (distributoroName != null && !distributoroName.isEmpty()) {
+            composed.put(distributorUri, distributoroName);
           }
         } catch(Exception e) {
           e.printStackTrace();
