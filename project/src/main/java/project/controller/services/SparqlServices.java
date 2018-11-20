@@ -252,6 +252,7 @@ public class SparqlServices {
   public static String getResourceName(String uri){
     String name = null;
     String query = "SELECT ?name WHERE { <" + uri + "> rdfs:label ?name. FILTER(lang(?name) = \"en\") } ORDER BY ?name LIMIT 1";
+    System.out.println("QUERY = " + query);
     try (QueryExecution qexec = createPrefixedQuery(query)) {
       ((QueryEngineHTTP)qexec).addParam("timeout", "10000"); // DBpedia timeout
       ResultSet rs = qexec.execSelect();
@@ -417,8 +418,8 @@ public class SparqlServices {
     LinkedHashMap<String, String> composed = new LinkedHashMap<>();
     String query = "SELECT ?studio ?name WHERE {\n" +
                     "<" + uri + "> rdf:type dbo:Film ;\n" +
-                    "              dbo:studio ?studio .\n" +
-                    "              ?studio rdfs:label ?name .\n" +
+                    "              dbp:studio ?studio .\n" +
+                    "?studio rdfs:label ?name .\n" +
                     "FILTER (lang(?name) = 'en').\n" +
                     "}";
     try (QueryExecution qexec = createPrefixedQuery(query)) {
@@ -626,7 +627,7 @@ public class SparqlServices {
     String query = "SELECT ?s ?name (COUNT(?f) AS ?n) WHERE {\n" +
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:starring <" + uri + "> ;\n" +
-                   "   dbo:studio ?s .\n" +
+                   "   dbp:studio ?s .\n" +
                    "?s foaf:name ?name .\n" +
                    "FILTER (lang(?name) = 'en').\n" +
                    "}\n" +
@@ -759,7 +760,7 @@ public class SparqlServices {
     String query = "SELECT ?s ?name (COUNT(?f) AS ?n) WHERE {\n" +
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:director <" + uri + "> ;\n" +
-                   "   dbo:studio ?s .\n" +
+                   "   dbp:studio ?s .\n" +
                    "?s foaf:name ?name .\n" +
                    "FILTER (lang(?name) = 'en').\n" +
                    "}\n" +
@@ -857,7 +858,7 @@ public class SparqlServices {
     String query = "SELECT ?s ?name (COUNT(?f) AS ?n) WHERE {\n" +
                    "?f rdf:type dbo:Film ;\n" +
                    "   dbo:musicComposer <" + uri + "> ;\n" +
-                   "   dbo:studio ?s .\n" +
+                   "   dbp:studio ?s .\n" +
                    "?s foaf:name ?name .\n" +
                    "FILTER (lang(?name) = 'en').\n" +
                    "}\n" +

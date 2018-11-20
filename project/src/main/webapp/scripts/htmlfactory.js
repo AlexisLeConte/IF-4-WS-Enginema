@@ -23,7 +23,7 @@ function appendQuerySuggestion(component, suggestion) {
 
 function appendInformationCard(component, cardTitle, values, valuesStyle) {
   let card = "<div class='card my-2'><div class='card-header'><h5 class='card-title mb-0 text-center'>" + cardTitle + "</h5></div>";
-  card += "<ul class='list-group list-group-flush mb-2'>"
+  card += "<ul class='list-group list-group-flush mb-2'>";
 
   values.map((item) => {
     card += "<li class='list-group-item no-border py-0'><div class='row-sm-2 search-suggestion " + valuesStyle + " text-center' onClick=\"queryByUri('" + item.uri + "')\">" + item.value + "</div></li>";
@@ -66,6 +66,9 @@ function appendFilmInformation(component, filmInfo) {
   if (filmInfo.Distributors && filmInfo.Distributors.length > 0) {
     appendInformationCard(component, "Distributor(s)", filmInfo.Distributors, "company-suggestion");
   }
+  if (filmInfo.Studio && filmInfo.Studio.length > 0) {
+    appendInformationCard(component, "Studio(s)", filmInfo.Studio, "company-suggestion");
+  }
 }
 
 function appendCompanyInformation(component, companyInfo) {
@@ -77,14 +80,14 @@ function appendCompanyInformation(component, companyInfo) {
           + "</ul></div>");
   
   // Relationships
-  if (filmInfo.FilmsProduced && filmsInfo.FilmsProduced.length > 0) {
-    appendInformationCard(component, "Film(s) Produced (" + filmsInfo.FilmsProduced.length + ")", filmInfo.FilmsProduced, "film-suggestion");
+  if (companyInfo.FilmsProduced && companyInfo.FilmsProduced.length > 0) {
+    appendInformationCard(component, "Film(s) Produced (" + companyInfo.FilmsProduced.length + ")", companyInfo.FilmsProduced, "film-suggestion");
   }
-  if (filmInfo.FilmsDistributed && filmsInfo.FilmsDistributed.length > 0) {
-    appendInformationCard(component, "Film(s) Distributed (" + filmsInfo.FilmsDistributed.length + ")", filmInfo.FilmsDistributed, "film-suggestion");
+  if (companyInfo.FilmsDistributed && companyInfo.FilmsDistributed.length > 0) {
+    appendInformationCard(component, "Film(s) Distributed (" + companyInfo.FilmsDistributed.length + ")", companyInfo.FilmsDistributed, "film-suggestion");
   }
-  if (filmInfo.Highestgrossingfilms && filmsInfo.Highestgrossingfilms.length > 0) {
-    appendInformationCard(component, "Highest Grossing Film(s)", filmInfo.Highestgrossingfilms, "film-suggestion");
+  if (companyInfo.Highestgrossingfilms && companyInfo.Highestgrossingfilms.length > 0) {
+    appendInformationCard(component, "Highest Grossing Film(s)", companyInfo.Highestgrossingfilms, "film-suggestion");
   }
 }
 
@@ -123,10 +126,10 @@ function appendPersonInformation(component, personInfo) {
     appendInformationCard(component, "Directed " + personInfo.AllFilmsDirected.length + " Film(s)", personInfo.AllFilmsDirected, "film-suggestion");
   }
   if (personInfo.KnownActors && personInfo.KnownActors.length > 0) {
-    appendInformationCard(component, "Known actor(s)", personInfo.KnownActors, "person-suggestion");
+    appendInformationCard(component, "Often worked with " + personInfo.KnownActors.length + " actor(s)", personInfo.KnownActors, "person-suggestion");
   }
   if (personInfo.KnownComposers && personInfo.KnownComposers.length > 0) {
-    appendInformationCard(component, "Known music composer(s)", personInfo.KnownComposers, "person-suggestion");
+    appendInformationCard(component, "Often worked with " + personInfo.KnownComposers.length + " music composer(s)", personInfo.KnownComposers, "person-suggestion");
   }
   if (personInfo.WorkedForAsDirector && personInfo.WorkedForAsDirector.length > 0) {
     appendInformationCard(component, "Often worked for (as a director)", personInfo.WorkedForAsDirector, "company-suggestion");
@@ -136,7 +139,7 @@ function appendPersonInformation(component, personInfo) {
     appendInformationCard(component, "Composed music for " + personInfo.AllFilmsComposedMusic.length + " Film(s)", personInfo.AllFilmsComposedMusic, "film-suggestion");
   }
   if (personInfo.KnownDirectors && personInfo.KnownDirectors.length > 0) {
-    appendInformationCard(component, "Known director(s)", personInfo.KnownDirectors, "person-suggestion");
+    appendInformationCard(component, "Often worked with " + personInfo.KnownDirectors.length + " director(s)", personInfo.KnownDirectors, "person-suggestion");
   }
   if (personInfo.WorkedForAsDirector && personInfo.WorkedForAsDirector.length > 0) {
     appendInformationCard(component, "Often worked for (as a music composer)", personInfo.WorkedForAsDirector, "company-suggestion");

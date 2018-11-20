@@ -254,7 +254,7 @@ public class QueryByUriAction implements Action {
       
       // Studios he worked for
       LinkedHashMap<String, String> studios = SparqlServices.getStudiosDirectorWorkedFor(uri);
-      addRelationship(PERSON_COLOR, "Worked For As Director", studios, infos, nodes, edges, originEdges);
+      addRelationship(COMPANY_COLOR, "Worked For As Director", studios, infos, nodes, edges, originEdges);
       
       // Major films he directed
       LinkedHashMap<String, String> majorFilms = new LinkedHashMap<>();
