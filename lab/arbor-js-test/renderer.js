@@ -47,6 +47,18 @@ function renderer(canvasId) {
         var text = edge.data.type
         context.font = 'bold 14pt Calibri';
         context.textAlign = 'center';
+
+        var rad1
+        var rad2
+        var centerX
+        particleSystem.eachNode(function(node, position){
+          if(position.x==pt1.x && position.y==pt1.y){
+            rad1 = node.data.radius
+          }
+          else if(position.x==pt2.x && position.y==pt2.y){
+            rad2 = node.data.radius
+          }
+        })
         
         // drawing
         context.strokeStyle = '#888888'
@@ -61,18 +73,22 @@ function renderer(canvasId) {
         context.translate((pt1.x + pt2.x) / 2,(pt1.y + pt2.y) / 2);
         if(pt2.x>=pt1.x && pt2.y>=pt1.y){          // Bottom-right
           context.rotate(-rotation+Math.PI*0.5);
+          centerX = (rad1-rad2)/2;
         }
         else if(pt2.x<=pt1.x && pt2.y>=pt1.y){     // Bottom-left
           context.rotate(rotation-Math.PI*0.5);
+          centerX = (rad2-rad1)/2;
         }
         else if(pt2.x<=pt1.x && pt2.y<=pt1.y){     // Top-left
           context.rotate(-rotation+Math.PI*0.5);
+          centerX = (rad2-rad1)/2;
         }
         else if(pt2.x>=pt1.x && pt2.y<=pt1.y){     // Top-right
           context.rotate(rotation-Math.PI*0.5);
+          centerX = (rad1-rad2)/2;
         }
         
-        context.fillText(text, 0, -8);
+        context.fillText(text, centerX, -8);
         context.restore();
       })
 
