@@ -9,7 +9,7 @@ public class StringUtils {
    * @return a valid alphanumeric identifier from the String str
    */
   public static String getAlphanumericIdentifier(String str) {
-    return str.replaceAll("^[a-zA-Z0-9]+", "");
+    return str.replaceAll("\\W+", "");
   }
   
   /**

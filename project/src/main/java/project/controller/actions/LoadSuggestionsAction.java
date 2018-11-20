@@ -35,22 +35,22 @@ public class LoadSuggestionsAction implements Action {
       JsonArray suggestions = new JsonArray();
       for (Map.Entry<String, String> resource : companies.entrySet()) {
         JsonObject suggestion = new JsonObject();
-        suggestion.addProperty("resourceName", resource.getKey());
-        suggestion.addProperty("resourceUri", resource.getValue());
+        suggestion.addProperty("resourceName", resource.getValue());
+        suggestion.addProperty("resourceUri", resource.getKey());
         suggestion.addProperty("resourceType", "company");
         suggestions.add(suggestion);
       }
       for (Map.Entry<String, String> resource : films.entrySet()) {
         JsonObject suggestion = new JsonObject();
-        suggestion.addProperty("resourceName", resource.getKey());
-        suggestion.addProperty("resourceUri", resource.getValue());
+        suggestion.addProperty("resourceName", resource.getValue());
+        suggestion.addProperty("resourceUri", resource.getKey());
         suggestion.addProperty("resourceType", "film");
         suggestions.add(suggestion);
       }
       for (Map.Entry<String, String> resource : persons.entrySet()) {
         JsonObject suggestion = new JsonObject();
-        suggestion.addProperty("resourceName", resource.getKey());
-        suggestion.addProperty("resourceUri", resource.getValue());
+        suggestion.addProperty("resourceName", resource.getValue());
+        suggestion.addProperty("resourceUri", resource.getKey());
         suggestion.addProperty("resourceType", "person");
         suggestions.add(suggestion);
       }

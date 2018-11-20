@@ -72,7 +72,7 @@ function renderer(viewport) {
       // pt2:  {x:#, y:#}  target position in screen coords
       particleSystem.eachEdge(function(edge, pt1, pt2) {
         var text = edge.data.type;
-        context.font = 'bold 12pt Calibri';;
+        context.font = 'bold 10pt Calibri';;
         context.textAlign = 'center';
         
         // drawing

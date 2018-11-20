@@ -35,9 +35,9 @@ public class QueryByNameAction implements Action {
       JsonArray suggestions = new JsonArray();
       for (Map.Entry<String, String> res : resources.entrySet()) {
         JsonObject suggestion = new JsonObject();
-        suggestion.addProperty("resourceName", res.getKey());
-        suggestion.addProperty("resourceUri", res.getValue());
-        suggestion.addProperty("resourceType", ResourceServices.getCategory(res.getValue()));
+        suggestion.addProperty("resourceName", res.getValue());
+        suggestion.addProperty("resourceUri", res.getKey());
+        suggestion.addProperty("resourceType", ResourceServices.getCategory(res.getKey()));
         suggestions.add(suggestion);
       }
       container.add("responseContent", suggestions);

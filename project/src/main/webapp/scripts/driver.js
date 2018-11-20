@@ -104,9 +104,6 @@ function queryByName(name) {
 }
 
 function queryByUri(uri) {
-  
-  alert("URI request : " + uri);
-  
   $.ajax({
     url: "./ActionServlet",
     method: "GET",
@@ -119,10 +116,12 @@ function queryByUri(uri) {
     $("#query-results").html("");
     clearGraph();
     if (data.responseType === "resourceInfoGraph") {
+      alert('updating graph');
       updateGraph(data.responseContent.resourceGraph);
+      alert('updating side panel');
       appendResourceInformation($("#query-results"), data.responseContent.resourceInfo);
     } else {
-      appendErrorMessage($("#query-results"), "Service unavailable :(");
+      appendErrorMessage($("#query-results"), "Requested resource not found :(");
     }
   });
 }

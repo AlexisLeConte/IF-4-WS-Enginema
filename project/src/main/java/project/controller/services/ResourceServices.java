@@ -18,16 +18,17 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.util.Pair;
 
 public class ResourceServices {
   
-  /** A local database of company names and URIs (key = name ; value = URI) */
+  /** A local database of company names and URIs (key = URI ; value = name) */
   private final static Map<String, String> COMPANIES = new LinkedHashMap<>();
-  /** A local database of film names and URIs (key = name ; value = URI) */
+  /** A local database of film names and URIs (key = URI ; value = name) */
   private final static Map<String, String> FILMS = new LinkedHashMap<>();
-  /** A local database of person names and URIs (key = name ; value = URI) */
+  /** A local database of person names and URIs (key = URI ; value = name) */
   private final static Map<String, String> PERSONS = new LinkedHashMap<>();
-  /** A local database of all the resource names and URIs (key = name ; value = URI) */
+  /** A local database of all the resource names and URIs (key = URI ; value = name) */
   private final static Map<String, String> ALL_RESOURCES = new LinkedHashMap<>();
   
   /** Maximum distance allowed between query words and resource names */
@@ -211,19 +212,19 @@ public class ResourceServices {
     });
     
     // Save the distance between the query and the resources
-    Map<String, Integer> resourceMatches = new LinkedHashMap<>();
+    Map<Pair<String, String>, Integer> resourceMatches = new LinkedHashMap<>();
     for (Map.Entry<String, String> entry : res.entrySet()) {
-      resourceMatches.put(entry.getKey(), 0);
+      resourceMatches.put(new Pair(entry.getKey(), entry.getValue()), 0);
     }
       
     // Match resource names with query words
-    for (Map.Entry<String, Integer> match : resourceMatches.entrySet()) {
+    for (Map.Entry<Pair<String, String>, Integer> match : resourceMatches.entrySet()) {
       for (String queryWord : queryWords) {
         if (queryWord.isEmpty()) continue;
         int queryWordScore = 0;
         int minDistance = MAX_LEVENSHTEIN_DISTANCE + 1;
         boolean useLevenshtein = true;
-        for (String resourceWord : match.getKey().split("\\W+")) {
+        for (String resourceWord : match.getKey().getValue().split("\\W+")) {
           resourceWord = resourceWord.toUpperCase();
           if (resourceWord.equals(queryWord)) {
             queryWordScore += (queryWord.length() * queryWord.length() * queryWord.length());
@@ -244,29 +245,29 @@ public class ResourceServices {
         match.setValue(match.getValue() + queryWordScore);
       }
       // Tie-breaking: shortest results first
-      match.setValue(match.getValue() + 1 - match.getKey().split("\\W+").length);
+      match.setValue(match.getValue() + 1 - match.getKey().getValue().split("\\W+").length);
     }
     
     // Keep only resources that matched every query word
-    List<Map.Entry<String, Integer>> sortedMatches = new ArrayList<>();
-    for (Map.Entry<String, Integer> match : resourceMatches.entrySet()) {
+    List<Map.Entry<Pair<String, String>, Integer>> sortedMatches = new ArrayList<>();
+    for (Map.Entry<Pair<String, String>, Integer> match : resourceMatches.entrySet()) {
       if (match.getValue() > 0) {
         sortedMatches.add(match);
       }
     }
       
     // Sort the resources by relevance
-    Collections.sort(sortedMatches, new Comparator<Map.Entry<String, Integer>>() {
+    Collections.sort(sortedMatches, new Comparator<Map.Entry<Pair<String, String>, Integer>>() {
       @Override
-      public int compare(Map.Entry<String, Integer> r1, Map.Entry<String, Integer> r2) {
+      public int compare(Map.Entry<Pair<String, String>, Integer> r1, Map.Entry<Pair<String, String>, Integer> r2) {
         return - r1.getValue().compareTo(r2.getValue());
       }
     });
       
     int numberOfResults = 0;
-    for (Map.Entry<String, Integer> match : sortedMatches) {
+    for (Map.Entry<Pair<String, String>, Integer> match : sortedMatches) {
       if(numberOfResults >= MAX_RESULTS) break;
-      relevantResults.put(match.getKey(), res.get(match.getKey()));
+      relevantResults.put(match.getKey().getKey(), match.getKey().getValue());
       numberOfResults++;
     }
     
@@ -276,17 +277,17 @@ public class ResourceServices {
   public static String getCategory(String uri) {
     String resourceCategory = null;
     synchronized (COMPANIES) {
-      if (COMPANIES.containsValue(uri)) {
+      if (COMPANIES.containsKey(uri)) {
         resourceCategory = "company";
       }
     }
     synchronized (FILMS) {
-      if (FILMS.containsValue(uri)) {
+      if (FILMS.containsKey(uri)) {
         resourceCategory = "film";
       }
     }
     synchronized (PERSONS) {
-      if (PERSONS.containsValue(uri)) {
+      if (PERSONS.containsKey(uri)) {
         resourceCategory = "person";
       }
     }
@@ -304,9 +305,9 @@ public class ResourceServices {
     BufferedReader reader = new BufferedReader(new FileReader(file));
     reader.readLine();
     while (reader.ready()) {
-      String name = reader.readLine();
       String uri = reader.readLine();
-      data.put(name, uri);
+      String name = reader.readLine();
+      data.put(uri, name);
     }
     reader.close();
     return data;
