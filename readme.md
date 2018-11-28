@@ -21,7 +21,7 @@ For further insight, you can read the Wiki pages.
 
 ## Contributing
 
-Contributions to the code or to the Wiki (documentation) must be done in english. Also, do not forget to update the Task Board.
+Contributions to the code or to the Wiki (documentation) must be done in english.
 
 ### Contributing to the Wiki
 
