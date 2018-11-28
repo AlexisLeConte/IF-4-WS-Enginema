@@ -17,6 +17,8 @@ This project focuses on the motion picture industry. Our application will handle
 
 Our goal is to provide a big picture of the film industry and to reveal the relationships between movies, companies and artists.
 
+For further insight, you can read the Wiki pages.
+
 ## Contributing
 
 Contributions to the code or to the Wiki (documentation) must be done in english. Also, do not forget to update the Task Board.
