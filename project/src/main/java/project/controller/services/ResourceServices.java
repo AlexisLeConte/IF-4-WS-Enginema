@@ -39,7 +39,7 @@ public class ResourceServices {
   private final static int NUMBER_OF_SUGGESTIONS = 3;
   
   /** Cache path */
-  private final static String CACHE_PATH = "C:/Users/alexi/Desktop"; // Machine-specific path
+  private final static String CACHE_PATH = "Path/To/Your/Cache/Files"; // Machine-specific path
   /** Companies cache filename */
   private final static String COMPANIES_CACHE_FILENAME = "companies-cache";
   /** Films cache filename */
