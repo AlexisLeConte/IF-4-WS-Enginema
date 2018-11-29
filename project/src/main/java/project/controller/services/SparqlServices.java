@@ -109,7 +109,7 @@ public class SparqlServices {
       QueryExecution queryActors = createPrefixedQuery(
           "SELECT DISTINCT ?a ?name WHERE {\n"
         + "  ?f rdf:type dbo:Film ;\n"
-        + "     dbo:runtime ?r ;\n"
+        + "     dbo:director ?d ;\n"
         + "     dbo:starring ?a .\n"
         + "  ?a rdfs:label ?name ;\n"
         + "     rdf:type dbo:Person .\n"
@@ -122,7 +122,6 @@ public class SparqlServices {
       QueryExecution queryDirectors = createPrefixedQuery(
           "SELECT DISTINCT ?a ?name WHERE {\n"
         + "  ?f rdf:type dbo:Film ;\n"
-        + "     dbo:runtime ?r ;\n"
         + "     dbo:director ?a .\n"
         + "  ?a rdfs:label ?name ;\n"
         + "     rdf:type dbo:Person .\n"
@@ -135,7 +134,7 @@ public class SparqlServices {
       QueryExecution queryMusicComposers = createPrefixedQuery(
           "SELECT DISTINCT ?a ?name WHERE {\n"
         + "  ?f rdf:type dbo:Film ;\n"
-        + "     dbo:runtime ?r ;\n"
+        + "     dbo:director ?d ;\n"
         + "     dbo:musicComposer ?a .\n"
         + "  ?a rdfs:label ?name ;\n"
         + "     rdf:type dbo:Person .\n"
